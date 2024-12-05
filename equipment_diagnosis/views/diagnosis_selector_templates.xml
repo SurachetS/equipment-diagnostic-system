@@ -1,0 +1,162 @@
+<odoo>
+    <template id="diagnosis_selector_page" name="Survey Selector Page">
+        <t t-call="web.basic_layout">
+            <div class="container mt-4">
+                <div class="survey-container d-flex justify-content-center"> <!-- ใช้ Flexbox -->
+                    <div class="survey-form">
+                        <br/>
+                        <br/>
+                        <div class="survey-header text-center">
+                            <h1>ระบบวินิจฉัยปัญหาความผิดปกติของอุปกรณ์</h1>
+                        </div>
+                        <br/>
+                        <form>
+                            <label for="category">เลือกประเภทอุปกรณ์</label>
+                            <select id="category" class="form-control custom-dropdown" onchange="loadEquipments()">
+                                <option value="">-- เลือก Category --</option>
+                                <t t-foreach="categories" t-as="category">
+                                    <option t-att-value="category.id" t-esc="category.name" />
+                                </t>
+                            </select>
+                            <br />
+                            <label for="equipment">เลือกอุปกรณ์</label>
+                            <select id="equipment" class="form-control custom-dropdown" onchange="loadSurveys()">
+                                <option value="">-- เลือก Equipment --</option>
+                            </select>
+                            <br />
+                            <label for="survey">เลือกปัญหาความผิดปกติ</label>
+                            <select id="survey" class="form-control custom-dropdown">
+                                <option value="">-- เลือกปัญหาความผิดปกติ --</option>
+                                <t t-foreach="surveys" t-as="survey">
+                                    <option t-att-value="survey.id" t-esc="survey.title" />
+                                </t>
+                            </select>
+                            <br />
+                            <div class="text-center mt-4">
+                                <button type="button" class="custom-button" onclick="startSurvey()">เริ่มการตรวจสอบ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <style>
+                /* ปรับแต่งปุ่ม */
+                .custom-button {
+                    background-color: #6b486b; /* สีพื้นหลัง */
+                    color: white; /* สีตัวอักษร */
+                    border: none; /* ไม่มีขอบ */
+                    border-radius: 15px; /* ขอบโค้งมน */
+                    padding: 10px 20px; /* ขนาด padding */
+                    font-size: 16px; /* ขนาดตัวอักษร */
+                    cursor: pointer; /* เปลี่ยนเป็นไอคอนมือ */
+                }
+
+                /* เพิ่มเอฟเฟกต์เมื่อ Hover */
+                .custom-button:hover {
+                    background-color: #5a3e5a; /* สีพื้นหลังเมื่อ Hover */
+                }
+                /* จำกัดความกว้างของฟอร์ม */
+                .survey-form {
+                    max-width: 400px;
+                    width: 100%;
+                }
+
+                /* จัด Dropdown ให้อยู่ในแนวเดียวกัน */
+                .custom-dropdown {
+                    width: 100%;
+                }
+
+                /* จัดให้อยู่ตรงกลาง */
+                .survey-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            </style>
+            <script>
+                function loadEquipments() {
+                    let categoryId = document.getElementById('category').value;
+                    let equipmentSelect = document.getElementById('equipment');
+                    let surveySelect = document.getElementById('survey');
+
+                    if (categoryId) {
+                        fetch('/diagnosis/equipments?category_id=' + categoryId)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // ล้าง Dropdown ของ Survey
+                                surveySelect.innerHTML = '<option value="">-- เลือกปัญหาความผิดปกติ --</option>';
+
+                                if (data.length === 0) {
+                                    // กรณีไม่มีอุปกรณ์ในหมวดหมู่
+                                    equipmentSelect.innerHTML = '<option value="">ไม่มีอุปกรณ์ในหมวดหมู่นี้</option>';
+                                } else {
+                                    // กรณีมีอุปกรณ์
+                                    equipmentSelect.innerHTML = '<option value="">-- เลือก Equipment --</option>';
+                                    data.forEach(equipment => {
+                                        equipmentSelect.innerHTML += `<option value="${equipment.id}">${equipment.name}</option>`;
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                equipmentSelect.innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
+                            });
+                    } else {
+                        // รีเซ็ต Dropdown เมื่อไม่มีการเลือก Category
+                        equipmentSelect.innerHTML = '<option value="">-- เลือก Equipment --</option>';
+                        surveySelect.innerHTML = '<option value="">-- เลือกปัญหาความผิดปกติ --</option>';
+                    }
+                }
+
+                function loadSurveys() {
+                    let equipmentId = document.getElementById('equipment').value;
+                    let surveySelect = document.getElementById('survey');
+
+                    if (equipmentId) {
+                        fetch('/diagnosis/surveys?equipment_id=' + equipmentId)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.length === 0) {
+                                    // กรณีไม่มี Survey
+                                    surveySelect.innerHTML = '<option value="">ไม่มีแบบสอบถามสำหรับอุปกรณ์นี้</option>';
+                                } else {
+                                    // กรณีมี Survey
+                                    surveySelect.innerHTML = '<option value="">-- เลือกปัญหาความผิดปกติ --</option>';
+                                    data.forEach(survey => {
+                                        surveySelect.innerHTML += `<option value="${survey.id}">${survey.title}</option>`;
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                surveySelect.innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
+                            });
+                    } else {
+                        // รีเซ็ต Dropdown เมื่อไม่มีการเลือก Equipment
+                        surveySelect.innerHTML = '<option value="">-- เลือกปัญหาความผิดปกติ --</option>';
+                    }
+                }
+
+                function startSurvey() {
+                    let surveyId = document.getElementById('survey').value; // ใช้ Survey ID
+                    if (surveyId) {
+                        // เรียก URL Custom Controller
+                        window.location.href = `/diagnosis/survey/start/${surveyId}`;
+                    } else {
+                        alert('กรุณาเลือก ปัญหาความผิดปกติ ก่อน');
+                    }
+                }
+            </script>
+        </t>
+    </template>
+</odoo>

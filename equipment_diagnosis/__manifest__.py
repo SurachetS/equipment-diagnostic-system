@@ -17,9 +17,11 @@
     "data": [
         "security/ir.model.access.csv",
         "views/base_views.xml",
+        "views/diagnosis_menu.xml",
         "views/equipment_category_views.xml",
         "views/equipment_model_views.xml",
         "views/survey_survey_views.xml",
+        "views/diagnosis_selector_templates.xml",
     ],
     "demo": [],
     "installable": True,

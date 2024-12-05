@@ -12,4 +12,13 @@
         </field>
     </record>
 
+    <template id="custom_survey_page_fill" inherit_id="survey.survey_page_fill">
+        <xpath expr="//div[@class='wrap o_survey_wrap d-flex']" position="before">
+            <!-- เพิ่ม Title ของ Survey -->
+            <div class="survey-title text-center mb-4 pt-4">
+                <h3 t-esc="survey.title" class="text-primary"/>
+            </div>
+        </xpath>
+    </template>
+
 </odoo>
