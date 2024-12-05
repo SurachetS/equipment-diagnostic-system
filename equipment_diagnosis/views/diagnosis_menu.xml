@@ -7,6 +7,6 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_diagnosis" name="Diagnosis Selector" sequence="1" parent="menu_equipment_diagnosis_root" action="action_open_diagnosis_selector" />
+    <menuitem id="menu_diagnosis" name="Diagnosis Selector" sequence="999" parent="menu_equipment_diagnosis_root" action="action_open_diagnosis_selector" />
 
 </odoo>
