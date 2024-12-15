@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="survey.survey_survey_view_form" />
         <field name="arch" type="xml">
             <field name="user_id" position="before">
-                <field name="equipment_model_id"/>
+                <field name="equipment_id"/>
             </field>
         </field>
     </record>
@@ -20,5 +20,18 @@
             </div>
         </xpath>
     </template>
+
+    <record id="diagnosis_action_survey_form" model="ir.actions.act_window">
+        <field name="name">Diagnosis</field>
+        <field name="res_model">survey.survey</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="help" type="html">
+            <p>
+                No Survey Found
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_diagnosis_equipment_survey" name="Diagnosis" parent="menu_equipment_diagnosis_root" action="diagnosis_action_survey_form" sequence="1"/>
 
 </odoo>
