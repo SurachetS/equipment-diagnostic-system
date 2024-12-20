@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Survey: printable page view (all pages) -->
+    <template id="survey_page_print_inherit" name="Survey: print page inherit" inherit_id="survey.survey_page_print">
+        <xpath expr="//div[contains(@class, 'd-flex') and contains(@class, 'gap-2')]/t" position="before">
+            <p>
+                <a role="button" class="btn btn-primary btn-lg" t-att-href="'/diagnosis/selector'">
+                    Home
+                </a>
+            </p>
+        </xpath>
+        <xpath expr="//fieldset" position="replace">
+             <fieldset disabled="disabled">
+                <t t-set="answer_lines" t-value="False" />
+                <t t-foreach='answer.user_input_line_ids' t-as='answer_lines'>
+                    <div class="js_question-wrapper" t-att-id="answer_lines.id">
+                        <h2 class="fs-4">
+                            <span t-field='answer_lines.question_id.title' class="text-break"/>
+                            <span t-if="answer_lines.question_id.constr_mandatory" class="text-danger">*</span>
+                            <span t-if="scoring_display_correction" class="badge rounded-pill" t-att-data-score-question="answer_lines.id"></span>
+                        </h2>
+                        <div class="text-muted oe_no_empty mt-1 text-break" t-if="not is_html_empty(answer_lines.question_id.description)" t-field='answer_lines.question_id.description'/>
+                        <t t-if="answer_lines.question_id.question_type in ['numerical_box', 'date', 'datetime', 'text_box', 'char_box']">
+                            <t t-if="answer_lines">
+                                <t t-set="answer_line" t-value="answer_lines[0]"/>
+                                <t t-if="answer_line.skipped">
+                                    <div class="row g-0">
+                                        <div class="col-12 col-md-6 col-lg-4 rounded ps-4 o_survey_question_skipped">
+                                            <input type="text"
+                                                t-attf-class="form-control fst-italic o_survey_question_{{answer_lines.question_id.question_type}} bg-transparent rounded-0 p-0" value="Skipped"/>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-elif="answer_line.survey_id.scoring_type != 'no_scoring' and answer_lines.question_id.question_type in ['numerical_box', 'date', 'datetime'] and answer_lines.question_id['answer_%s' % answer_lines.question_id.question_type]">
+                                    <div class="row g-0">
+                                        <div t-attf-class="col-12 col-md-6 col-lg-4 rounded ps-4 #{'bg-success' if answer_line.answer_is_correct else 'bg-danger'}">
+                                            <t t-if="answer_lines.question_id.question_type == 'numerical_box'" t-call="survey.question_numerical_box"/>
+                                            <t t-if="answer_lines.question_id.question_type == 'date'" t-call="survey.question_date"/>
+                                            <t t-if="answer_lines.question_id.question_type == 'datetime'" t-call="survey.question_datetime"/>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="answer_lines.question_id.question_type == 'text_box'" t-call="survey.question_text_box"/>
+                                    <t t-if="answer_lines.question_id.question_type == 'char_box'" class="o_survey_print o_survey_comment_container p-0">
+                                        <span t-out="answer_lines[0].value_char_box or None"/>
+                                    </t>
+                                    <t t-if="answer_lines.question_id.question_type == 'numerical_box'" t-call="survey.question_numerical_box"/>
+                                    <t t-if="answer_lines.question_id.question_type == 'date'" t-call="survey.question_date"/>
+                                    <t t-if="answer_lines.question_id.question_type == 'datetime'" t-call="survey.question_datetime"/>
+                                </t>
+                                <t t-if="answer_lines.survey_id.scoring_type != 'no_scoring'
+                                    and answer_lines.question_id.question_type in ['numerical_box', 'date', 'datetime']
+                                    and answer_lines.question_id['answer_%s' % answer_lines.question_id.question_type]
+                                    and not answer_line.answer_is_correct">
+                                    <div class="row g-0">
+                                        <t t-set="correct_answer" t-value="answer_lines.question_id['answer_%s' % answer_lines.question_id.question_type ]"/>
+                                        <div class="col-12 text-success mt-1">
+                                            The correct answer was:
+                                            <strong t-esc="correct_answer" t-if="answer_lines.question_id.question_type == 'numerical_box'"/>
+                                            <strong t-esc="format_date(correct_answer)" t-if="answer_lines.question_id.question_type == 'date'"/>
+                                            <strong t-esc="format_datetime(correct_answer)" t-if="answer_lines.question_id.question_type == 'datetime'"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <t t-if="answer_lines.question_id.question_type == 'text_box'" t-call="survey.question_text_box"/>
+                                <t t-if="answer_lines.question_id.question_type == 'char_box'" t-call="survey.question_char_box"/>
+                                <t t-if="answer_lines.question_id.question_type == 'numerical_box'" t-call="survey.question_numerical_box"/>
+                                <t t-if="answer_lines.question_id.question_type == 'date'" t-call="survey.question_date"/>
+                                <t t-if="answer_lines.question_id.question_type == 'datetime'" t-call="survey.question_datetime"/>
+                            </t>
+                        </t>
+                        <t t-if="answer_lines.question_id.question_type == 'simple_choice'" t-call="equipment_diagnosis.question_simple_choice_only_answer"/>
+                        <t t-if="answer_lines.question_id.question_type == 'scale'" t-call="survey.question_scale"/>
+                        <t t-if="answer_lines.question_id.question_type == 'multiple_choice'" t-call="survey.question_multiple_choice"/>
+                        <t t-if="answer_lines.question_id.question_type == 'matrix'" t-call="survey.question_matrix"/>
+                        <t t-if="answer_lines.question_id.question_type in ['simple_choice', 'multiple_choice', 'matrix', 'scale']">
+                            <t t-if="answer_lines">
+                                <t t-if="answer_lines[0].skipped">
+                                    <div class="row g-0">
+                                        <div class="col-12 o_survey_choice_question_skipped mt-1">
+                                            This question was skipped
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                        </t>
+                        <div class="o_survey_question_error overflow-hidden border-0 py-0 px-3 alert alert-danger" role="alert"></div>
+                    </div>
+                </t>
+                <!--Set question to false to avoid background miss match as last question is still in context and is used in survey.layout t-call.-->
+                <t t-set="question" t-value="False"/>
+            </fieldset>
+        </xpath>
+    </template>
+
+</data>
+</odoo>

@@ -9,6 +9,10 @@
             <field name="user_id" position="before">
                 <field name="equipment_id"/>
             </field>
+            <xpath expr="//field[@name='random_questions_count']" position="attributes">
+                <attribute name="column_invisible">parent.questions_selection in ['all', 'decision_tree']</attribute>
+                <attribute name="invisible">not is_page or parent.questions_selection == 'decision_tree'</attribute>
+            </xpath>
         </field>
     </record>
 

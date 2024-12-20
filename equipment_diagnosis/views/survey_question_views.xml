@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_survey_question_form" model="ir.ui.view">
+        <field name="model">survey.question</field>
+        <field name="inherit_id" ref="survey.survey_question_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page/field[@name='suggested_answer_ids']/list/field[@name='value_image']" position="after">
+                <field name="next_question_id" column_invisible="parent.questions_selection not in ['decision_tree']"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
