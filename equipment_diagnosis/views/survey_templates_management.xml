@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+
+    <template id="survey_navigation_inherit" name="Survey: Navigation Inherit" inherit_id="survey.survey_navigation">
+        <xpath expr="//div/t" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//div/button[2]" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+    </template>
+
+</data>
+</odoo>
