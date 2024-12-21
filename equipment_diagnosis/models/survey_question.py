@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models, tools, _
+from odoo import fields, models
 
 
 class SurveyQuestionAnswer(models.Model):
-    _inherit = 'survey.question.answer'
+    _inherit = "survey.question.answer"
 
     next_question_id = fields.Many2one(
         "survey.question",
