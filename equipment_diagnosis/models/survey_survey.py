@@ -15,18 +15,11 @@ class Survey(models.Model):
 
 
     def _get_next_page_or_question(self, user_input, page_or_question_id, go_back=False):
-        # XXX - START
-
         if self.questions_selection == 'decision_tree':
             survey = user_input.survey_id
             pages_or_questions = survey._get_pages_or_questions(user_input)
             current_question = self.env['survey.question'].browse(page_or_question_id)
             Question = self.env['survey.question']
-
-            print("DEBUG: User Input Lines")
-            for user_input_line_id in user_input.user_input_line_ids:
-                print(user_input_line_id)
-            print("DEBUG END")
 
             # Handle Next Question
             if not go_back:
@@ -74,19 +67,10 @@ class Survey(models.Model):
                     next_question = selected_answer.next_question_id
 
                     if next_question:
-                        print("DEBUG: Next Question")
-                        print(f"Selected Answer: {selected_answer}")
-                        print(f"Next Question: {next_question.title}")
-                        print(f"Current Question: {current_question.title}")
-                        print(f"User Input Line Question: {user_input_line.question_id.title}")
-                        print("DEBUG END")
                         return next_question
 
             # Return empty question if no next question is found
             return self.env['survey.question']
-
-        # XXX - END
-
         else:
             return super()._get_next_page_or_question(user_input=user_input, page_or_question_id=page_or_question_id, go_back=go_back)
 
