@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="diagnosis_equipment_action" model="ir.actions.act_window">
+    <record id="diagnostic_equipment_action" model="ir.actions.act_window">
         <field name="name">Equipment</field>
         <field name="res_model">maintenance.equipment</field>
         <field name="view_mode">kanban,list,form</field>
@@ -17,6 +17,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_diagnosis_equipment" name="Equipments" parent="menu_equipment_diagnosis_root" action="diagnosis_equipment_action" sequence="2"/>
+    <menuitem id="menu_diagnostic_equipment" name="Equipments" parent="menu_equipment_diagnostic_root" action="diagnostic_equipment_action" sequence="2"/>
 
 </odoo>

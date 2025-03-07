@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_open_diagnostic_selector" model="ir.actions.act_url">
+        <field name="name">Diagnostic Selector</field>
+        <field name="url">/diagnostic/selector</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_diagnostic" name="Diagnostic Selector" sequence="999" parent="menu_equipment_diagnostic_root" action="action_open_diagnostic_selector" />
+
+</odoo>

@@ -1,3 +1,3 @@
 # Surachet Saejueng
 
-from . import diagnosis_selector
+from . import diagnostic_selector

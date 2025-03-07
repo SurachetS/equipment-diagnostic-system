@@ -5,15 +5,15 @@ from odoo.http import request
 import json
 
 
-class DiagnosisController(http.Controller):
+class DiagnosticController(http.Controller):
 
-    @http.route("/diagnosis/selector", type="http", auth="public")
-    def diagnosis_selector(self):
+    @http.route("/diagnostic/selector", type="http", auth="public")
+    def diagnostic_selector(self):
         # ดึงข้อมูล Category
         categories = request.env["maintenance.equipment.category"].sudo().search([])
-        return request.render("equipment_diagnosis.diagnosis_selector_page", {"categories": categories})
+        return request.render("equipment_diagnosis.diagnostic_selector_page", {"categories": categories})
 
-    @http.route("/diagnosis/equipments", type="http", auth="public")
+    @http.route("/diagnostic/equipments", type="http", auth="public")
     def get_equipments(self, category_id=None):
         if not category_id:
             # ส่งกลับข้อความผิดพลาดถ้าไม่มี category_id
@@ -31,7 +31,7 @@ class DiagnosisController(http.Controller):
         result = [{"id": eq.id, "name": eq.name} for eq in equipments]
         return request.make_response(json.dumps(result), headers={"Content-Type": "application/json"})
 
-    @http.route("/diagnosis/surveys", type="http", auth="public")
+    @http.route("/diagnostic/surveys", type="http", auth="public")
     def get_surveys(self, equipment_id=None):
         if not equipment_id:
             response = {"error": "Missing equipment_id"}
@@ -47,7 +47,7 @@ class DiagnosisController(http.Controller):
         result = [{"id": survey.id, "title": survey.title} for survey in surveys]
         return request.make_response(json.dumps(result), headers={"Content-Type": "application/json"})
 
-    @http.route("/diagnosis/survey/start/<int:survey_id>", type="http", auth="public")
+    @http.route("/diagnostic/survey/start/<int:survey_id>", type="http", auth="public")
     def custom_survey_start(self, survey_id):
         # ค้นหา Survey ด้วย ID
         survey = request.env["survey.survey"].sudo().browse(survey_id)

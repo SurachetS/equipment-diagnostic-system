@@ -1,5 +1,5 @@
 <odoo>
-    <template id="diagnosis_selector_page" name="Survey Selector Page">
+    <template id="diagnostic_selector_page" name="Survey Selector Page">
         <t t-call="web.basic_layout">
             <div class="container mt-4">
                 <div class="survey-container d-flex justify-content-center"> <!-- ใช้ Flexbox -->
@@ -80,7 +80,7 @@
                     let surveySelect = document.getElementById('survey');
 
                     if (categoryId) {
-                        fetch('/diagnosis/equipments?category_id=' + categoryId)
+                        fetch('/diagnostic/equipments?category_id=' + categoryId)
                             .then(response => {
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
@@ -118,7 +118,7 @@
                     let surveySelect = document.getElementById('survey');
 
                     if (equipmentId) {
-                        fetch('/diagnosis/surveys?equipment_id=' + equipmentId)
+                        fetch('/diagnostic/surveys?equipment_id=' + equipmentId)
                             .then(response => {
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
@@ -151,7 +151,7 @@
                     let surveyId = document.getElementById('survey').value; // ใช้ Survey ID
                     if (surveyId) {
                         // เรียก URL Custom Controller
-                        window.location.href = `/diagnosis/survey/start/${surveyId}`;
+                        window.location.href = `/diagnostic/survey/start/${surveyId}`;
                     } else {
                         alert('กรุณาเลือก ปัญหาความผิดปกติ ก่อน');
                     }

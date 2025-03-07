@@ -23,8 +23,8 @@
         </xpath>
     </template>
 
-    <record id="diagnosis_action_survey_form" model="ir.actions.act_window">
-        <field name="name">Diagnosis</field>
+    <record id="diagnostic_action_survey_form" model="ir.actions.act_window">
+        <field name="name">Diagnostic</field>
         <field name="res_model">survey.survey</field>
         <field name="view_mode">kanban,list,form,activity</field>
         <field name="help" type="html">
@@ -34,6 +34,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_diagnosis_equipment_survey" name="Diagnosis" parent="menu_equipment_diagnosis_root" action="diagnosis_action_survey_form" sequence="1"/>
+    <menuitem id="menu_diagnostic_equipment_survey" name="Diagnostic" parent="menu_equipment_diagnostic_root" action="diagnostic_action_survey_form" sequence="1"/>
 
 </odoo>
