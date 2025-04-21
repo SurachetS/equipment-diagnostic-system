@@ -43,7 +43,7 @@ class DiagnosticController(http.Controller):
             return request.make_response(json.dumps(response), headers={"Content-Type": "application/json"}, status=400)
 
         # ดึงข้อมูล Survey ตาม Equipment
-        surveys = (request.env["survey.survey"].sudo().search([("equipment_id", "=", equipment_id)]))
+        surveys = (request.env["survey.survey"].sudo().search([("equipment_id", "=", equipment_id)], order='title asc'))
         result = [{"id": survey.id, "title": survey.title} for survey in surveys]
         return request.make_response(json.dumps(result), headers={"Content-Type": "application/json"})
 

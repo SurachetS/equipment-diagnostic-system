@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import fields, models, api
 from odoo.osv import expression
 
 
@@ -12,7 +12,6 @@ class Survey(models.Model):
         selection_add=[("decision_tree", "Decision Tree")],
         ondelete={"decision_tree": "cascade"},
     )
-
 
     def _get_next_page_or_question(self, user_input, page_or_question_id, go_back=False):
         if self.questions_selection == 'decision_tree':
@@ -50,7 +49,7 @@ class Survey(models.Model):
             current_page_index = pages_or_questions.ids.index(page_or_question_id)
 
             # Check if on the first or last page/question
-            if (go_back and current_page_index == 0) or (not go_back and current_page_index == len(pages_or_questions) - 1):
+            if (go_back and current_page_index == 0) or (not go_back and not current_question.suggested_answer_ids.mapped("next_question_id")):
                 return Question
 
             # Find the user input line for the current question
@@ -97,3 +96,17 @@ class Survey(models.Model):
 
         return super()._get_survey_questions(answer=answer, page_id=page_id, question_id=question_id)
 
+    def _is_last_page_or_question(self, user_input, page_or_question):
+        if self.questions_selection == 'decision_tree':
+            if page_or_question.suggested_answer_ids.mapped("next_question_id"):
+                return False
+            return True
+        return super()._is_last_page_or_question(user_input=user_input, page_or_question=page_or_question)
+
+    @api.depends('question_and_page_ids.triggering_answer_ids')
+    def _compute_has_conditional_questions(self):
+        for survey in self:
+            if self.questions_selection == 'decision_tree':
+                survey.has_conditional_questions = True
+            else:
+                return super()._compute_has_conditional_questions()
