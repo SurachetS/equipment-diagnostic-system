@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <odoo>
-    <menuitem id="menu_equipment_diagnostic_root" name="Equipment Diagnostic" web_icon="equipment_diagnosis,static/description/icon.png" sequence="100"/>
+    <menuitem id="menu_equipment_diagnostic_root" name="Equipment Diagnostic" web_icon="equipment_diagnostic,static/description/icon.png" sequence="100"/>
     <menuitem id="menu_equipment_diagnostic_main" name="Equipment" parent="menu_equipment_diagnostic_root" sequence="10"/>
     <menuitem id="menu_equipment_diagnostic_reporting" name="Reporting" parent="menu_equipment_diagnostic_root" sequence="20"/>
     <menuitem id="menu_equipment_diagnostic_config" name="Configuration" parent="menu_equipment_diagnostic_root" sequence="90"/>

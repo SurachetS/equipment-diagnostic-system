@@ -11,7 +11,7 @@ class DiagnosticController(http.Controller):
     def diagnostic_selector(self):
         # ดึงข้อมูล Category
         categories = request.env["maintenance.equipment.category"].sudo().search([])
-        return request.render("equipment_diagnosis.diagnostic_selector_page", {"categories": categories})
+        return request.render("equipment_diagnostic.diagnostic_selector_page", {"categories": categories})
 
     @http.route("/diagnostic/equipments", type="http", auth="public")
     def get_equipments(self, category_id=None):

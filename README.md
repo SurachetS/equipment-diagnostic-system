@@ -1,1 +1,1 @@
-# equipment-diagnosis-system
+# equipment-diagnostic-system

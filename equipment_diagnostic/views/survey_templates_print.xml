@@ -73,7 +73,7 @@
                                 <t t-if="answer_lines.question_id.question_type == 'datetime'" t-call="survey.question_datetime"/>
                             </t>
                         </t>
-                        <t t-if="answer_lines.question_id.question_type == 'simple_choice'" t-call="equipment_diagnosis.question_simple_choice_only_answer"/>
+                        <t t-if="answer_lines.question_id.question_type == 'simple_choice'" t-call="equipment_diagnostic.question_simple_choice_only_answer"/>
                         <t t-if="answer_lines.question_id.question_type == 'scale'" t-call="survey.question_scale"/>
                         <t t-if="answer_lines.question_id.question_type == 'multiple_choice'" t-call="survey.question_multiple_choice"/>
                         <t t-if="answer_lines.question_id.question_type == 'matrix'" t-call="survey.question_matrix"/>
